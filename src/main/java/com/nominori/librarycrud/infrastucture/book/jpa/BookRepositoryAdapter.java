@@ -18,28 +18,28 @@ public class BookRepositoryAdapter implements BookRepository {
 
     @Override
     public void save(Book book) {
-        bookJPARepository.save(bookMapper.of(book));
+        bookJPARepository.save(bookMapper.fromDomainToJPA(book));
     }
 
     @Override
     public Optional<Book> findById(Book.BookId id) {
-        return Optional.ofNullable(bookMapper.of(
+        return Optional.ofNullable(bookMapper.fromJPAToDomain(
                 bookJPARepository.findById(id.getValue()).get()));
     }
 
     @Override
     public List<Book> findAll() {
-        return bookJPARepository.findAll().stream().map((bookMapper::of)).toList();
+        return bookJPARepository.findAll().stream().map((bookMapper::fromJPAToDomain)).toList();
     }
 
     @Override
     public void delete(Book book) {
-        bookJPARepository.delete(bookMapper.of(book));
+        bookJPARepository.delete(bookMapper.fromDomainToJPA(book));
     }
 
     @Override
     public Optional<Book> findByTitle(Book.BookTitle bookTitle) {
-        return Optional.ofNullable(bookMapper.of(
+        return Optional.ofNullable(bookMapper.fromJPAToDomain(
                 bookJPARepository.findBookJPAEntityByBookAuthor(bookTitle.getValue()).get()));
     }
 }

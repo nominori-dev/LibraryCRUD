@@ -7,17 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookMapper {
 
-    public BookJPAEntity of(Book book){
-        return BookJPAEntity.builder()
+    public BookJPAEntity fromDomainToJPA(Book book) {
+        BookJPAEntity bookJPAEntity = BookJPAEntity.builder()
                 .title(book.getBookTitle().getValue())
                 .bookAuthor(book.getBookAuthor().getValue())
                 .build();
+
+        bookJPAEntity.setId(book.getBookId().getValue());
+
+        return bookJPAEntity;
     }
 
-    public Book of(BookJPAEntity bookJPAEntity){
-        return new Book(new Book.BookId(bookJPAEntity.getId()),
-                        new Book.BookTitle(bookJPAEntity.getTitle()),
-                        new Book.BookAuthor(bookJPAEntity.getBookAuthor()));
-    }
+    public Book fromJPAToDomain(BookJPAEntity bookJPAEntity) {
+        Book book = new Book();
+        book.setBookId(new Book.BookId(bookJPAEntity.getId()));
+        book.setBookTitle(new Book.BookTitle(bookJPAEntity.getTitle()));
+        book.setBookAuthor(new Book.BookAuthor(bookJPAEntity.getBookAuthor()));
 
+        return book;
+    }
 }
